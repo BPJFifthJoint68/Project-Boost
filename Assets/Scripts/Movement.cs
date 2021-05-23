@@ -35,65 +35,75 @@ public class Movement : MonoBehaviour
     }
 
     void ProcessThrust()
-    {           
+    {      
+        if (Input.GetKey(KeyCode.Space))
+        {    
         StartThusting();
+        }
+        else
+        {
+        StopThrusting();
+        }
     }
 
     void ProcessRotation()
     {
-        StartRotation();
-    }
-
-    void StartThusting()
-    {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.A))
         {
-            rocketRigidBody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
-            if (!audioSource.isPlaying)
-            {
-                audioSource.PlayOneShot(mainEngine);
-            }
-            if (!rocketJetParticles.isPlaying)
-            {
-                rocketJetParticles.Play();
-            }
+            RotateLeft();
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            RotateRight();
         }
         else
         {
-            StopThrusting();
+            StopRotation();
         }
+    }
+
+    void StartThusting()
+    {     
+        rocketRigidBody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(mainEngine);
+        }
+        if (!rocketJetParticles.isPlaying)
+        {
+            rocketJetParticles.Play();
+        }       
     }
 
     void StopThrusting()
     {
         audioSource.Stop();
         rocketJetParticles.Stop();
+    }   
+
+    private void RotateLeft()
+    {
+        ApplyRotation(rotationThrust);
+        if (!rightSideThrusterParticles.isPlaying)
+        {
+            rightSideThrusterParticles.Play();
+        }
     }
 
-    void StartRotation()
+    private void RotateRight()
     {
-        if (Input.GetKey(KeyCode.A))
+        ApplyRotation(-rotationThrust);
+        if (!leftSideThrusterParticles.isPlaying)
         {
-            ApplyRotation(rotationThrust);
-            if (!rightSideThrusterParticles.isPlaying)
-            {
-                rightSideThrusterParticles.Play();
-            }
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            ApplyRotation(-rotationThrust);
-            if (!leftSideThrusterParticles.isPlaying)
-            {
-                leftSideThrusterParticles.Play();
-            }
-        }
-        else
-        {
-            rightSideThrusterParticles.Stop();
-            leftSideThrusterParticles.Stop();
+            leftSideThrusterParticles.Play();
         }
     }
+
+    private void StopRotation()
+    {
+        rightSideThrusterParticles.Stop();
+        leftSideThrusterParticles.Stop();
+    } 
 
     void ApplyRotation(float rotationThisFrame)
     {
