@@ -20,14 +20,12 @@ public class Movement : MonoBehaviour
     Rigidbody rocketRigidBody; // CACHE
     AudioSource audioSource;
 
-    // Start is called before the first frame update
     void Start()
     {
         rocketRigidBody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();     
     }
 
-    // Update is called once per frame
     void Update()
     {
         ProcessThrust();
